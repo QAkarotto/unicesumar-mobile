@@ -1,0 +1,50 @@
+# ===== Sistema Operacional =====
+.DS_Store
+Thumbs.db
+
+# ===== Logs e temporarios =====
+*.log
+*.tmp
+*.swp
+*.swo
+
+# ===== IDEs =====
+.idea/
+*.iml
+.vscode/
+
+# ===== Dart / Flutter - cache e build =====
+**/.dart_tool/
+**/.pub-cache/
+**/.pub/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/build/
+**/coverage/
+**/doc/api/
+
+# ===== Flutter - artefatos por plataforma =====
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/ephemeral/
+**/macos/Flutter/ephemeral/
+**/linux/flutter/ephemeral/
+**/windows/flutter/ephemeral/
+
+# ===== Android =====
+**/android/.gradle/
+**/android/local.properties
+**/android/key.properties
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+
+# ===== Simbolos / ofuscacao =====
+app.*.symbols
+app.*.map.json
+
+# ===== Segredos =====
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
