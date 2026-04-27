@@ -13,7 +13,6 @@ Este código pode apresentar problemas de desempenho com listas muito grandes. R
 **Onde olhar no código**
 
 - [flutter/app/lib/widgets/filmes_listview.dart](../../flutter/app/lib/widgets/filmes_listview.dart)
-- Trecho: o bloco com `TODO Desafio 1` e o uso de `ListView` com todos os itens renderizados de uma vez.
 
 ## Desafio 2
 
