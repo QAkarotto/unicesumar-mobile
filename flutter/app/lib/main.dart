@@ -51,6 +51,7 @@ Future<List<FilmeItem>> carregarFilmes() async {
   final String jsonString = await rootBundle.loadString(
     'assets/data/filmes.json',
   );
+
   final List<dynamic> dados = jsonDecode(jsonString) as List<dynamic>;
 
   return dados
@@ -70,7 +71,9 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Aula - Lista de Filmes',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1F6FEB)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1F6FEB),
+        ),
         useMaterial3: true,
       ),
       home: TelaPrincipalMovieApp(filmes: filmes),
@@ -98,18 +101,30 @@ class TelaPrincipalMovieApp extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
               child: Text(
                 'Temas',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            Expanded(flex: 1, child: TemasGridView(temas: temas)),
+            Expanded(
+              flex: 1,
+              child: TemasGridView(temas: temas),
+            ),
             const Padding(
               padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
               child: Text(
                 'Filmes em Destaque',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            Expanded(flex: 4, child: FilmesListView(filmes: filmes)),
+            Expanded(
+              flex: 4,
+              child: FilmesListView(filmes: filmes),
+            ),
           ],
         ),
       ),
