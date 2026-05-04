@@ -37,5 +37,5 @@ O formato de entrega segue o mesmo padrão das atividades anteriores:
 - Título do e-mail: **Trabalho 1 Mobile 2BIM - Turma: ESOFT7S/ADSIS5S**.
 - Incluir no corpo do e-mail: nome dos integrantes, usuário GitHub e link do repositório.
 - Colocar em **CC** o e-mail de todos os integrantes.
-- Grupos de até **5 participantes**.
+- Grupos de até **6 participantes**.
 - Mostrar o código rodando e explicar as implementações realizadas.
