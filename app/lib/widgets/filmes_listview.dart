@@ -3,17 +3,22 @@ import 'package:flutter/material.dart';
 import '../models/filme_item.dart';
 
 class FilmesListView extends StatelessWidget {
-  const FilmesListView({super.key, required this.filmes});
+  const FilmesListView({super.key, required this.filmes, this.onTap});
 
   final List<FilmeItem> filmes;
+  final void Function(FilmeItem)? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-      children: <Widget>[
-        for (final FilmeItem filme in filmes)
-          Center(
+      itemCount: filmes.length,
+      itemBuilder: (context, index) {
+        final filme = filmes[index];
+
+        return Center(
+          child: InkWell(
+            onTap: () => onTap?.call(filme),
             child: Container(
               width: 220,
               margin: const EdgeInsets.only(bottom: 16),
@@ -65,7 +70,8 @@ class FilmesListView extends StatelessWidget {
               ),
             ),
           ),
-      ],
+        );
+      },
     );
   }
 }
