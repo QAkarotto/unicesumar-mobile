@@ -40,3 +40,5 @@ Refatore o `onTap` para usar AutoRoute em vez de `Navigator.push()`.
 ---
 
 **Investigue, pesquise e implemente! 🎓**
+
+
