@@ -1,12 +1,18 @@
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'models/filme_item.dart';
 import 'models/tema_item.dart';
+import 'routes/routes.dart';
 import 'widgets/filmes_listview.dart';
 import 'widgets/temas_gridview.dart';
+
+final _appRouter = Routes();
+
+List<FilmeItem> filmesGlobais = [];
 
 const List<TemaItem> temas = <TemaItem>[
   TemaItem(
@@ -43,14 +49,19 @@ const List<TemaItem> temas = <TemaItem>[
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final List<FilmeItem> filmes = await carregarFilmes();
-  runApp(MainApp(filmes: filmes));
+
+  runApp(
+    MainApp(filmes: filmes),
+  );
 }
 
 Future<List<FilmeItem>> carregarFilmes() async {
   final String jsonString = await rootBundle.loadString(
     'assets/data/filmes.json',
   );
+
   final List<dynamic> dados = jsonDecode(jsonString) as List<dynamic>;
 
   return dados
@@ -66,22 +77,23 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    filmesGlobais = filmes;
+
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Aula - Lista de Filmes',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1F6FEB)),
+      title: 'Movie App',
+      theme: ThemeData( 
+        colorScheme: ColorScheme.fromSeed( seedColor: const Color(0xFF1F6FEB), ),
         useMaterial3: true,
       ),
-      home: TelaPrincipalMovieApp(filmes: filmes),
+      routerConfig: _appRouter.config(),
     );
   }
 }
 
-class TelaPrincipalMovieApp extends StatelessWidget {
-  const TelaPrincipalMovieApp({super.key, required this.filmes});
-
-  final List<FilmeItem> filmes;
+@RoutePage()
+class TelaPrincipalScreen extends StatelessWidget {
+  const TelaPrincipalScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +102,7 @@ class TelaPrincipalMovieApp extends StatelessWidget {
         title: const Text('Movie App - Lista de Filmes'),
         centerTitle: true,
       ),
+
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -109,15 +122,16 @@ class TelaPrincipalMovieApp extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
+
             Expanded(
               flex: 4,
               child: FilmesListView(
-                filmes: filmes,
+                filmes: filmesGlobais,
+
                 onTap: (filme) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetalhesFilmeScreen(filme: filme),
+                  context.pushRoute(
+                    DetalhesFilmeRoute(
+                      filme: filme,
                     ),
                   );
                 },
@@ -130,54 +144,50 @@ class TelaPrincipalMovieApp extends StatelessWidget {
   }
 }
 
+@RoutePage()
 class DetalhesFilmeScreen extends StatelessWidget {
-  final FilmeItem filme;
+  const DetalhesFilmeScreen({
+    super.key,
+    required this.filme,
+  });
 
-  const DetalhesFilmeScreen({super.key, required this.filme});
+  final FilmeItem filme;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalhes do Filme'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
       ),
+
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
+
           child: Column(
             mainAxisSize: MainAxisSize.min,
+
             children: <Widget>[
               SizedBox(
                 width: 320,
                 height: 180,
+
                 child: Image.network(
                   filme.imageUrl,
                   fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.broken_image),
-                    );
-                  },
                 ),
               ),
+
               const SizedBox(height: 16),
+
               Text(
                 filme.titulo,
+                textAlign: TextAlign.center,
+
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
-                textAlign: TextAlign.center,
               ),
             ],
           ),
