@@ -1,32 +1,30 @@
-# Programação para Dispositivos Móveis - Unicesumar Ponta Grossa
+# Trilha Flutter
 
-Repositório com os materiais das aulas práticas de Dart e Flutter.
+Esta pasta concentra os projetos Flutter desenvolvidos durante a disciplina.
+
+## Objetivo da Trilha
+
+Aplicar os conceitos de Dart na construção de interfaces e fluxos de aplicações móveis, com foco em:
+
+- Estrutura de projetos Flutter
+- Widgets, layouts e componentização
+- Estado e composição de telas
+- Boas práticas de organização
 
 ## Estrutura
 
-- [ATIVIDADES AVALIATIVAS/1BIM](ATIVIDADES%20AVALIATIVAS/1BIM) - atividades avaliativas da primeira etapa
-- [ATIVIDADES AVALIATIVAS/2BIM](ATIVIDADES%20AVALIATIVAS/2BIM) - desafios para evoluir o código base Flutter
-- [flutter/app](flutter/app) - aplicação usada como base para as melhorias em aula
-- [dart/dart_app](dart/dart_app) - exemplos e exercícios da parte Dart
+```text
+flutter/
+  app/
+    lib/          # aplicação principal
+    docs/         # roteiros de aula
+    test/         # testes de widget/unidade
+    aula_widget/  # projeto dedicado a widgets e layouts
+```
 
+## Projeto Principal
 
-## Atividades Avaliativas
-
-As descrições completas ficaram organizadas na pasta [ATIVIDADES AVALIATIVAS/1BIM](ATIVIDADES%20AVALIATIVAS/1BIM):
-
-- [Atividade 1](ATIVIDADES%20AVALIATIVAS/1BIM/ATIVIDADE_AVALIATIVA_1.md)
-- [Atividade 2](ATIVIDADES%20AVALIATIVAS/1BIM/ATIVIDADE_AVALIATIVA_2.md)
-- [Atividade 3](ATIVIDADES%20AVALIATIVAS/1BIM/ATIVIDADE_AVALIATIVA_3.md)
-- [Atividade 4](ATIVIDADES%20AVALIATIVAS/1BIM/ATIVIDADE_AVALIATIVA_4.md)
-
-
-## Desafios do Starter Flutter
-
-Os desafios para evolução do código base Flutter estão em [ATIVIDADES AVALIATIVAS/2BIM/ATIVIDADE_AVALIATIVA_1.md](ATIVIDADES%20AVALIATIVAS/2BIM/ATIVIDADE_AVALIATIVA_1.md) e apontam para os trechos de código onde cada melhoria deve ser implementada.
-
-## Como executar
-
-### Flutter
+Local: `flutter/app`
 
 ```bash
 cd flutter/app
@@ -35,19 +33,26 @@ flutter run
 flutter test
 ```
 
-### Dart
+## Projeto Complementar de Widgets
+
+Local: `flutter/app/aula_widget`
 
 ```bash
-cd dart/dart_app
-dart pub get
-dart run bin/dart_examples.dart
-dart test
+cd flutter/app/aula_widget
+flutter pub get
+flutter run
+flutter test
 ```
 
-## Mapa Mental
+## Fluxo Recomendado em Aula
 
-- **Link:** [Mapa Mental da Disciplina](https://app.xmind.com/share/J36p6d0F)
+1. Abra o roteiro em `app/docs/`.
+2. Execute o projeto correspondente ao tema da aula.
+3. Replique o exemplo e implemente variações.
+4. Versione a evolução do código por aula.
 
-## Observação
+## Dicas Rápidas
 
-Este repositório é didático e prioriza exemplos pequenos, exercícios guiados e evolução incremental.
+- Verifique dispositivos com `flutter devices`.
+- Execute `flutter doctor` ao preparar o ambiente.
+- Evite commitar artefatos de build e caches locais.
