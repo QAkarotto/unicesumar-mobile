@@ -24,27 +24,59 @@ Thumbs.db
 **/coverage/
 **/doc/api/
 
+# ===== Gerados por build_runner e geradores =====
+**/*.g.dart
+**/*.freezed.dart
+**/*.config.dart
+**/*.gr.dart
+**/*.gm.dart
+**/*.chopper.dart
+
 # ===== Flutter - artefatos por plataforma =====
 **/ios/Flutter/.last_build_id
 **/ios/Flutter/ephemeral/
 **/macos/Flutter/ephemeral/
 **/linux/flutter/ephemeral/
 **/windows/flutter/ephemeral/
+**/ios/Flutter/Generated.xcconfig
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+flutter_export_environment.sh
 
-# ===== Android =====
+# ===== Android - gerados pelo Flutter =====
 **/android/.gradle/
 **/android/local.properties
 **/android/key.properties
 **/android/app/debug/
 **/android/app/profile/
 **/android/app/release/
+**/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+**/android/**/*.class
+**/android/**/*.lock
+
+# ===== iOS/macOS - gerados pelo Flutter =====
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/macos/Runner/GeneratedPluginRegistrant.*
+**/ios/Pods/
+**/macos/Pods/
+**/*.pbxuser
+**/*.perspective
+
+# ===== Linux/Windows - gerados pelo Flutter =====
+**/linux/flutter/generated_plugins.cmake
+**/windows/runner/flutter/generated_plugins.cmake
 
 # ===== Simbolos / ofuscacao =====
 app.*.symbols
 app.*.map.json
+*.so
+*.a
+*.o
 
 # ===== Segredos =====
 *.jks
 *.keystore
 *.p12
 *.mobileprovision
+.env
+.env.local
+.env.*.local

@@ -1,7 +1,0 @@
-# Regras principais de ignore ficam em /mobile/.gitignore.
-# Este arquivo local mantem apenas padroes minimos deste subprojeto.
-
-.dart_tool/
-.flutter-plugins-dependencies
-build/
-coverage/

@@ -5,7 +5,7 @@ Repositório com os materiais das aulas práticas de Dart e Flutter.
 ## Estrutura
 
 - [ATIVIDADES AVALIATIVAS/1BIM](ATIVIDADES%20AVALIATIVAS/1BIM) - atividades avaliativas da primeira etapa
-- [ATIVIDADES AVALIATIVAS/2BIM](ATIVIDADES%20AVALIATIVAS/2BIM) - desafios para evoluir o código base Flutter
+- [ATIVIDADES AVALIATIVAS/2BIM](ATIVIDADES%20AVALIATIVAS/2BIM) - atividades por aula, cada uma em uma branch própria
 - [flutter/app](flutter/app) - aplicação usada como base para as melhorias em aula
 - [dart/dart_app](dart/dart_app) - exemplos e exercícios da parte Dart
 
@@ -20,9 +20,13 @@ As descrições completas ficaram organizadas na pasta [ATIVIDADES AVALIATIVAS/1
 - [Atividade 4](ATIVIDADES%20AVALIATIVAS/1BIM/ATIVIDADE_AVALIATIVA_4.md)
 
 
-## Desafios do Starter Flutter
+## Atividades do 2BIM
 
-Os desafios para evolução do código base Flutter estão em [ATIVIDADES AVALIATIVAS/2BIM/ATIVIDADE_AVALIATIVA_1.md](ATIVIDADES%20AVALIATIVAS/2BIM/ATIVIDADE_AVALIATIVA_1.md) e apontam para os trechos de código onde cada melhoria deve ser implementada.
+Cada atividade usa a branch indicada no próprio título do arquivo. Se você estiver no fork, crie uma branch sua a partir da branch da aula para receber as atualizações.
+
+- [Atividade 1](ATIVIDADES%20AVALIATIVAS/2BIM/ATIVIDADE%201%20(branch%20aula-list-grid-view).md) - `aula-list-grid-view`
+- [Atividade 2](ATIVIDADES%20AVALIATIVAS/2BIM/ATIVIDADE%202%20(branch%20aula-navigator-router).md) - `aula-navigator-router`
+- [Atividade 3](ATIVIDADES%20AVALIATIVAS/2BIM/ATIVIDADE%203%20(branch%20aula-api).md) - `aula-api`
 
 ## Como executar
 
