@@ -1,30 +1,41 @@
 import 'package:lumberdash/lumberdash.dart';
-import 'package:movies/data/models/favorite.dart';
+import 'package:movies/data/database/database_interface.dart';
+import 'package:movies/data/database/models/favorite.dart';
 import 'package:movies/data/models/genre.dart';
+import 'package:movies/data/models/movie_configuration.dart';
 import 'package:movies/data/models/movie_credits.dart';
 import 'package:movies/data/models/movie_details.dart';
 import 'package:movies/data/models/movie_response.dart';
 import 'package:movies/data/models/movie_results.dart';
 import 'package:movies/data/models/movie_videos.dart';
 import 'package:movies/network/movie_api_service.dart';
+import 'package:movies/utils/utils.dart';
 
 class MovieViewModel {
   final MovieAPIService movieAPIService;
+  final IDatabase database;
+  MovieConfiguration? movieConfiguration;
   List<Genre>? movieGenres;
-  Stream<List<Favorite>>? favoriteStream;
-  List<Favorite>? favoriteList;
   List<MovieResults> trendingMovies = [];
   List<MovieResults> topRatedMovies = [];
   List<MovieResults> popularMovies = [];
   List<MovieResults> nowPlayingMovies = [];
 
-  MovieViewModel({required this.movieAPIService});
+  MovieViewModel({required this.movieAPIService, required this.database});
 
   Future setup() async {
     await Future.wait([setupConfiguration(), setupGenres()]);
   }
 
-  Future setupConfiguration() async {}
+  Future setupConfiguration() async {
+    final response = await movieAPIService.getMovieConfiguration();
+    if (response.statusCode == 200) {
+      movieConfiguration = MovieConfiguration.fromJson(response.data);
+    } else {
+      logError(
+          'Failed to load genres with error ${response.statusCode} and message ${response.statusMessage}');
+    }
+  }
 
   Future setupGenres() async {
     final response = await movieAPIService.getGenres();
@@ -36,66 +47,29 @@ class MovieViewModel {
     }
   }
 
-  Stream<List<Favorite>> streamFavorites() {
-    favoriteList ??= [
-      Favorite(
-          movieId: 1,
-          image:
-              'http://image.tmdb.org/t/p/w780/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg',
-          favorite: false,
-          title: 'Title',
-          overview: 'Overview',
-          popularity: 1.0,
-          releaseDate: DateTime.now()),
-      Favorite(
-          movieId: 2,
-          image:
-              'http://image.tmdb.org/t/p/w780/gKkl37BQuKTanygYQG1pyYgLVgf.jpg',
-          favorite: false,
-          title: 'Title',
-          overview: 'Overview',
-          popularity: 1.0,
-          releaseDate: DateTime.now()),
-      Favorite(
-          movieId: 3,
-          image:
-              'http://image.tmdb.org/t/p/w780/4xJd3uwtL1vCuZgEfEc8JXI9Uyx.jpg',
-          favorite: false,
-          title: 'Title',
-          overview: 'Overview',
-          popularity: 1.0,
-          releaseDate: DateTime.now()),
-      Favorite(
-          movieId: 4,
-          image:
-              'http://image.tmdb.org/t/p/w780/uuA01PTtPombRPvL9dvsBqOBJWm.jpg',
-          favorite: false,
-          title: 'Title',
-          overview: 'Overview',
-          popularity: 1.0,
-          releaseDate: DateTime.now()),
-      Favorite(
-          movieId: 5,
-          image:
-              'http://image.tmdb.org/t/p/w780/H6vke7zGiuLsz4v4RPeReb9rsv.jpg',
-          favorite: false,
-          title: 'Title',
-          overview: 'Overview',
-          popularity: 1.0,
-          releaseDate: DateTime.now()),
-    ];
-    favoriteStream = Stream.value(favoriteList!);
-    return favoriteStream!;
-  }
-
-  void updateFavorite(Favorite favorite) {
-    final index = favoriteList!
-        .indexWhere((favItem) => favItem.movieId == favorite.movieId);
-    if (index != -1) {
-      favoriteList![index] = favorite;
+  String? getImageUrl(ImageSize size, String? file) {
+    if (file == null || movieConfiguration == null) {
+      logMessage('getImageUrl file: $file');
+      return null;
     }
+    return getSizedImageUrl(size, movieConfiguration!, file);
   }
 
+  Future saveFavorite(MovieDetails movieDetails) async {
+    return;
+  }
+
+  Future<bool> removeFavorite(int id) async {
+    return false;
+  }
+
+  Future<List<DBFavorite>> getFavorites() async {
+    return const <DBFavorite>[];
+  }
+
+  Stream<List<DBFavorite>> streamFavorites() {
+    return Stream.value(const <DBFavorite>[]);
+  }
 
   Future<MovieResponse?> getTrendingMovies(int page) async {
     final response = await movieAPIService.getTrending(page);

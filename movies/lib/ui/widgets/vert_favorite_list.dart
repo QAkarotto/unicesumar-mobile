@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:movies/data/models/favorite.dart';
+import 'package:movies/data/database/models/favorite.dart';
 import 'package:movies/utils/utils.dart';
 import 'package:movies/ui/movie_viewmodel.dart';
 import 'package:movies/ui/widgets/favorite_row.dart';
 
 class VerticalFavoriteList extends StatelessWidget {
-  final List<Favorite> favorites;
+  final List<DBFavorite> favorites;
   final MovieViewModel movieViewModel;
   final OnMovieTap onMovieTap;
   final OnFavoriteResultsTap onFavoritesTap;
@@ -16,8 +16,7 @@ class VerticalFavoriteList extends StatelessWidget {
       required this.favorites,
       required this.movieViewModel,
       required this.onMovieTap,
-        required this.onFavoritesTap,
-      });
+      required this.onFavoritesTap});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class VerticalFavoriteList extends StatelessWidget {
             },
           );
         },
-        childCount: favorites.length, // Number of items in the list
+        childCount: favorites.length,
       ),
     );
   }

@@ -1,17 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:movies/data/models/genre.dart';
+import 'package:movies/data/models/genre_state.dart';
 
 import 'package:movies/ui/theme/theme.dart';
 import 'package:movies/utils/utils.dart';
-
-class GenreState {
-  final Genre genre;
-  final bool isSelected;
-
-  GenreState({required this.genre, required this.isSelected});
-}
 
 typedef OnGenresSelected = void Function(List<GenreState>);
 typedef OnGenresExpanded = void Function(bool);
@@ -109,8 +102,7 @@ class _GenreSectionState extends ConsumerState<GenreSection> {
       return FilterChip(
         backgroundColor: searchBarBackground,
         selectedColor: buttonGrey,
-        label: Text(genre.name,
-            style: Theme.of(context).textTheme.labelSmall),
+        label: Text(genre.name, style: Theme.of(context).textTheme.labelSmall),
         selected: widget.genreStates[index].isSelected,
         onSelected: (selected) {
           setState(

@@ -1,22 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:movies/data/database/models/favorite.dart';
+import 'package:movies/data/models/movie_configuration.dart';
 
-import 'package:movies/data/models/favorite.dart';
+import 'package:movies/data/models/movie_details.dart';
+import 'package:movies/data/models/movie_results.dart';
 import 'package:movies/data/models/movie_videos.dart';
-enum ImageSize {
-  small,
-  large
-}
-String getImageUrl(ImageSize size, String? path) {
-  if (path == null) {
-    return '';
+
+enum ImageSize { small, large }
+
+String imageUrl(String baseUrl, String size, String file) =>
+    '$baseUrl$size$file';
+
+String? getSizedImageUrl(
+    ImageSize size, MovieConfiguration configuration, String? file) {
+  if (file == null) {
+    return null;
   }
   switch (size) {
     case ImageSize.small:
-      return 'http://image.tmdb.org/t/p/w154/$path';
+      return imageUrl(configuration.images.baseUrl,
+          configuration.images.posterSizes[1], file);
     case ImageSize.large:
-      return 'http://image.tmdb.org/t/p/w780/$path';
+      return imageUrl(configuration.images.baseUrl,
+          configuration.images.posterSizes[5], file);
   }
+}
+
+String? getMovieDetailsImagePath(
+    MovieDetails details, MovieConfiguration configuration) {
+  return getSizedImageUrl(ImageSize.large, configuration, details.backdropPath);
 }
 
 String youtubeImageFromId(String videoId) {
@@ -27,10 +40,13 @@ String youtubeUrlFromId(String videoId) {
   return 'https://www.youtube.com/watch?v=$videoId';
 }
 
+const Widget emptyWidget = SizedBox.shrink();
 
 typedef OnMovieTap = void Function(int movieId);
+typedef OnMovieResultsTap = void Function(MovieResults movie);
 typedef OnMovieVideoTap = void Function(MovieVideo video);
-typedef OnFavoriteResultsTap = void Function(Favorite favorite);
+typedef OnFavoriteResultsTap = void Function(DBFavorite favorite);
+typedef OnSearch = void Function(String searchString);
 
 Widget addVerticalSpace(double amount) {
   return SizedBox(height: amount);
@@ -52,5 +68,3 @@ enum Sorting {
 
   final String name;
 }
-
-
