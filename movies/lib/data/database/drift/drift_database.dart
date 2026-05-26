@@ -12,7 +12,18 @@ class DriftDatabase implements IDatabase {
 
   @override
   Future<List<DBFavorite>> getFavorites() async {
-    throw UnimplementedError('Exercicio: implementar favoritos com Drift');
+    final rows = await movieDatabase.managers.driftFavorite.get();
+    return rows.map((r) => DBFavorite(
+      id: r.id,
+      movieId: r.movieId,
+      backdropPath: r.backdropPath,
+      posterPath: r.posterPath,
+      favorite: r.favorite,
+      popularity: r.popularity,
+      releaseDate: r.releaseDate,
+      title: r.title,
+      overview: r.overview,
+    )).toList();
   }
 
   @override
@@ -56,13 +67,27 @@ class DriftDatabase implements IDatabase {
   }
 
   @override
-  Future<bool> removeFavorite(int id) async {
-    throw UnimplementedError('Exercicio: implementar favoritos com Drift');
+  Future<bool> removeFavorite(int movieId) async {
+    final count = await movieDatabase.managers.driftFavorite
+        .filter((f) => f.movieId(movieId))
+        .delete();
+    return count > 0;
   }
 
   @override
   Future saveFavorite(DBFavorite favorite) async {
-    throw UnimplementedError('Exercicio: implementar favoritos com Drift');
+    await movieDatabase.managers.driftFavorite.create(
+      (_) => DriftFavoriteCompanion.insert(
+        movieId: favorite.movieId,
+        backdropPath: favorite.backdropPath,
+        posterPath: favorite.posterPath,
+        favorite: favorite.favorite,
+        popularity: favorite.popularity,
+        releaseDate: favorite.releaseDate,
+        title: favorite.title,
+        overview: favorite.overview,
+      ),
+    );
   }
 
   @override
@@ -89,6 +114,17 @@ class DriftDatabase implements IDatabase {
 
   @override
   Stream<List<DBFavorite>> streamFavorites() {
-    throw UnimplementedError('Exercicio: implementar favoritos com Drift');
+    return movieDatabase.managers.driftFavorite.watch().map((rows) =>
+        rows.map((r) => DBFavorite(
+              id: r.id,
+              movieId: r.movieId,
+              backdropPath: r.backdropPath,
+              posterPath: r.posterPath,
+              favorite: r.favorite,
+              popularity: r.popularity,
+              releaseDate: r.releaseDate,
+              title: r.title,
+              overview: r.overview,
+            )).toList());
   }
 }

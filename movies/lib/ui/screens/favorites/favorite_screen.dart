@@ -126,7 +126,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   }
 
   Future removeFavorite(DBFavorite favorite) async {
-    await movieViewModel.removeFavorite(favorite.id);
+    await movieViewModel.removeFavorite(favorite.movieId);
     setState(() {});
   }
 }
