@@ -1,7 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
-
 import 'package:movies/router/app_routes.dart';
 import 'package:movies/ui/theme/theme.dart';
 
@@ -32,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
     return NavigationBar(
       destinations: const [
         NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-        NavigationDestination(icon: Icon(Symbols.genres), label: 'Genre'),
+        NavigationDestination(icon: Icon(Icons.category), label: 'Genre'),
         NavigationDestination(icon: Icon(Icons.favorite), label: 'Favorites'),
       ],
       selectedIndex: tabsRouter.activeIndex,
