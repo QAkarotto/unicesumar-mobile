@@ -31,8 +31,8 @@ class HomeScreenImage extends ConsumerWidget {
         itemCount: movieViewModel.nowPlayingMovies.length,
         itemBuilder: (BuildContext context, int index) {
           final currentMovie = movieViewModel.nowPlayingMovies[index];
-          final imageUrl =
-              getImageUrl(ImageSize.large, currentMovie.backdropPath);
+          final imageUrl = movieViewModel.getImageUrl(
+              ImageSize.large, currentMovie.backdropPath);
           String uniqueHeroTag = '${currentMovie.posterPath}swiper';
           return GestureDetector(
             onTap: () {
@@ -46,13 +46,15 @@ class HomeScreenImage extends ConsumerWidget {
                   alignment: Alignment.topCenter,
                   child: Hero(
                     tag: uniqueHeroTag,
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      alignment: Alignment.topCenter,
-                      fit: BoxFit.fitHeight,
-                      height: 374,
-                      width: screenWidth,
-                    ),
+                    child: imageUrl != null
+                        ? CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            alignment: Alignment.topCenter,
+                            fit: BoxFit.fitHeight,
+                            height: 374,
+                            width: screenWidth,
+                          )
+                        : emptyWidget,
                   ),
                 ),
                 Align(

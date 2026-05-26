@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumberdash/lumberdash.dart';
+import 'package:movies/data/database/models/favorite.dart';
 import 'package:movies/data/models/movie_credits.dart';
 
 import 'package:movies/data/models/movie_details.dart';
@@ -29,10 +31,12 @@ class MovieDetail extends ConsumerStatefulWidget {
 }
 
 class _MovieDetailState extends ConsumerState<MovieDetail> {
-  final favoriteNotifier = ValueNotifier<bool>(false);
   late MovieViewModel movieViewModel;
   MovieCredits? credits;
   MovieVideos? movieVideos;
+  List<DBFavorite> favorites = [];
+  final favoriteNotifier = ValueNotifier<bool>(false);
+  int currentFavoriteId = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +46,20 @@ class _MovieDetailState extends ConsumerState<MovieDetail> {
       loading: () => const NotReady(),
       data: (viewModel) {
         movieViewModel = viewModel;
+        getFavorites();
         return buildScreen();
       },
     );
+  }
+
+  Future getFavorites() async {
+    favorites = await movieViewModel.getFavorites();
+    favoriteNotifier.value = isMovieFavorite(widget.movieId);
+  }
+
+  bool isMovieFavorite(int id) {
+    return favorites.firstWhereOrNull((favorite) => favorite.movieId == id) !=
+        null;
   }
 
   Widget buildScreen() {
@@ -86,11 +101,14 @@ class _MovieDetailState extends ConsumerState<MovieDetail> {
                         SliverList(
                           delegate: SliverChildListDelegate([
                             Stack(children: [
-                              DetailImage(details: movieDetails)
+                              DetailImage(
+                                details: movieDetails,
+                                movieConfiguration:
+                                    movieViewModel.movieConfiguration!,
+                              ),
                             ]),
                             GenreRow(genres: movieDetails.genres),
-                            MovieOverview(
-                                details: movieDetails),
+                            MovieOverview(details: movieDetails),
                             ValueListenableBuilder<bool>(
                               valueListenable: favoriteNotifier,
                               builder: (BuildContext context, bool value,
@@ -99,8 +117,15 @@ class _MovieDetailState extends ConsumerState<MovieDetail> {
                                   favoriteSelected: favoriteNotifier.value,
                                   onFavoriteSelected: () async {
                                     if (favoriteNotifier.value) {
+                                      if (currentFavoriteId != -1) {
+                                        movieViewModel
+                                            .removeFavorite(currentFavoriteId);
+                                      }
                                       favoriteNotifier.value = false;
                                     } else {
+                                      currentFavoriteId = movieDetails.id;
+                                      await movieViewModel
+                                          .saveFavorite(movieDetails);
                                       favoriteNotifier.value = true;
                                     }
                                   },
@@ -118,18 +143,23 @@ class _MovieDetailState extends ConsumerState<MovieDetail> {
                             Trailer(
                               movieVideos: movieVideos?.results,
                               onVideoTap: (video) {
-                                  context.router
-                                      .push(VideoPageRoute(movieVideo: video));
+                                context.router
+                                    .push(VideoPageRoute(movieVideo: video));
                               },
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 16, bottom: 16, top: 16),
-                              child: Text('Cast', style: Theme.of(context).textTheme.headlineLarge),
+                              child: Text('Cast',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge),
                             ),
                           ]),
                         ),
-                        HorizontalCast(castList: credits?.cast ?? []),
+                        HorizontalCast(
+                            movieViewModel: movieViewModel,
+                            castList: credits?.cast ?? []),
                       ]),
                     )
                   ],

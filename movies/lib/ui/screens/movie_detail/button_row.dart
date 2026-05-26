@@ -101,7 +101,6 @@ class _ButtonRowState extends State<ButtonRow> with TickerProviderStateMixin {
               'Rate',
               style: Theme.of(context).textTheme.labelSmall,
             ),
-            // TODO For you to implement
             icon: IconButton(
               onPressed: () {},
               icon: const Icon(
@@ -116,7 +115,6 @@ class _ButtonRowState extends State<ButtonRow> with TickerProviderStateMixin {
               'Share',
               style: Theme.of(context).textTheme.labelSmall,
             ),
-            // TODO For you to implement
             icon: IconButton(
               onPressed: () {},
               icon: const Icon(

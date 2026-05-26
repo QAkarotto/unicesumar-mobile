@@ -1,6 +1,7 @@
 # ===== Sistema Operacional =====
 .DS_Store
 Thumbs.db
+*.pyc
 
 # ===== Logs e temporarios =====
 *.log
@@ -8,10 +9,24 @@ Thumbs.db
 *.swp
 *.swo
 
+# ===== Outros temporarios =====
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
 # ===== IDEs =====
 .idea/
 *.iml
+.ipr
+.iws
 .vscode/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
 
 # ===== Dart / Flutter - cache e build =====
 **/.dart_tool/
@@ -80,3 +95,4 @@ app.*.map.json
 .env
 .env.local
 .env.*.local
+/Chapter**

@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movies/data/database/models/favorite.dart';
 
-import 'package:movies/data/models/favorite.dart';
 import 'package:movies/providers.dart';
 import 'package:movies/router/app_routes.dart';
 import 'package:movies/utils/utils.dart';
@@ -23,9 +23,9 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   late MovieViewModel movieViewModel;
-  List<Favorite> currentFavorites = [];
+  List<DBFavorite> currentFavorites = [];
+  final valueNotifier = ValueNotifier<List<DBFavorite>>([]);
   Sorting selectedSort = Sorting.aToz;
-  final valueNotifier = ValueNotifier<List<Favorite>>([]);
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +42,11 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
 
   Widget buildScreen() {
     return SafeArea(
-      child: StreamBuilder<List<Favorite>>(
+      child: StreamBuilder<List<DBFavorite>>(
         stream: getFavoriteStream(),
         builder: (context, snapshot) {
-          if ((snapshot.connectionState != ConnectionState.active) && (snapshot.connectionState != ConnectionState.done)) {
+          if ((snapshot.connectionState != ConnectionState.active) &&
+              (snapshot.connectionState != ConnectionState.done)) {
             return const NotReady();
           }
           return Scaffold(
@@ -65,7 +66,9 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(
                                     16, 16.0, 0.0, 24.0),
-                                child: Text('My Favorites', style: Theme.of(context).textTheme.titleLarge),
+                                child: Text('My Favorites',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge),
                               ),
                             ],
                           ),
@@ -83,11 +86,8 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
                             context.router
                                 .push(MovieDetailRoute(movieId: movieId));
                           },
-                          onFavoritesTap: (Favorite favorite) {
-                            setState(() {
-                              favorite.favorite = !favorite.favorite;
-                              movieViewModel.updateFavorite(favorite);
-                            });
+                          onFavoritesTap: (DBFavorite favorite) {
+                            removeFavorite(favorite);
                           },
                         )
                       ],
@@ -102,7 +102,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
     );
   }
 
-  Stream<List<Favorite>> getFavoriteStream() {
+  Stream<List<DBFavorite>> getFavoriteStream() {
     return movieViewModel.streamFavorites();
   }
 
@@ -125,9 +125,8 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
     valueNotifier.value = currentFavorites;
   }
 
-  Future removeFavorite(Favorite favorite) async {
-    setState(() {
-      currentFavorites.remove(favorite);
-    });
+  Future removeFavorite(DBFavorite favorite) async {
+    await movieViewModel.removeFavorite(favorite.id);
+    setState(() {});
   }
 }
