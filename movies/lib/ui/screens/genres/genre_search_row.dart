@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:movies/ui/theme/theme.dart';
-
 typedef OnSearch = void Function(String searchString);
 
 class GenreSearchRow extends ConsumerStatefulWidget {
   final OnSearch onSearch;
+  final String initialValue;
 
-  const GenreSearchRow(this.onSearch, {super.key});
+  const GenreSearchRow(this.onSearch, {this.initialValue = '', super.key});
 
   @override
   ConsumerState<GenreSearchRow> createState() => _GenreSearchRowState();
@@ -21,7 +20,15 @@ class _GenreSearchRowState extends ConsumerState<GenreSearchRow> {
   @override
   void initState() {
     super.initState();
-    movieTextController = TextEditingController(text: '');
+    movieTextController = TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void didUpdateWidget(covariant GenreSearchRow oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      movieTextController.text = widget.initialValue;
+    }
   }
 
   @override
@@ -37,7 +44,7 @@ class _GenreSearchRowState extends ConsumerState<GenreSearchRow> {
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0),
           child: TextField(
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             focusNode: textFocusNode,
             keyboardType: TextInputType.text,
             enableSuggestions: false,
@@ -49,24 +56,27 @@ class _GenreSearchRowState extends ConsumerState<GenreSearchRow> {
             autocorrect: false,
             decoration: InputDecoration(
               filled: true,
-              focusColor: searchBarBackground,
+              focusColor: Theme.of(context).colorScheme.surface,
               focusedBorder: null,
               enabledBorder: null,
-              fillColor: searchBarBackground,
+              fillColor: Theme.of(context).colorScheme.surface,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide.none,
               ),
               hintText: 'movie name, genre',
-              hintStyle: body1Regular.copyWith(color: posterBorder),
+              hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
               suffixIcon: IconButton(
                 onPressed: () {
                   movieTextController.clear();
                 },
-                icon: const Icon(Icons.close, color: Colors.white,), // Close icon
+                icon: Icon(Icons.close,
+                    color: Theme.of(context).colorScheme.onSurface),
               ),
               prefixIcon: IconButton(
-                icon: const Icon(Icons.search, color: Colors.white,),
+                icon: Icon(Icons.search,
+                    color: Theme.of(context).colorScheme.onSurface),
                 onPressed: () {
                   widget.onSearch(movieTextController.text);
                 },

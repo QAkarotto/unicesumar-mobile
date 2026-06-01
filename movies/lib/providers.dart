@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movies/data/database/database_interface.dart';
 import 'package:movies/data/database/drift/drift_database.dart';
@@ -39,6 +40,36 @@ Future<Prefs> prefs(PrefsRef ref) async {
 
 @Riverpod(keepAlive: true)
 AppRouter appRouter(AppRouterRef ref) => AppRouter();
+
+class ThemeModeNotifier extends StateNotifier<ThemeMode> {
+  ThemeModeNotifier(this.ref) : super(ThemeMode.dark) {
+    _loadThemeMode();
+  }
+
+  final Ref ref;
+
+  Future<void> _loadThemeMode() async {
+    final prefs = await ref.read(prefsProvider.future);
+    final isLight = prefs.getBool(PrefKeys.themeIsLight) ?? false;
+    state = isLight ? ThemeMode.light : ThemeMode.dark;
+  }
+
+  Future<void> setThemeMode(ThemeMode mode) async {
+    state = mode;
+    final prefs = await ref.read(prefsProvider.future);
+    prefs.setBool(PrefKeys.themeIsLight, mode == ThemeMode.light);
+  }
+
+  Future<void> toggleTheme() async {
+    await setThemeMode(
+        state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark);
+  }
+}
+
+final themeModeProvider =
+    StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
+  return ThemeModeNotifier(ref);
+});
 
 @Riverpod(keepAlive: true)
 Future<IDatabase> driftDatabase(DriftDatabaseRef ref) {

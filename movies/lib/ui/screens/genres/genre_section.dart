@@ -2,8 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movies/data/models/genre_state.dart';
-
-import 'package:movies/ui/theme/theme.dart';
 import 'package:movies/utils/utils.dart';
 
 typedef OnGenresSelected = void Function(List<GenreState>);
@@ -46,7 +44,7 @@ class _GenreSectionState extends ConsumerState<GenreSection> {
         children: [
           ExpansionPanel(
             isExpanded: widget.isExpanded,
-            backgroundColor: screenBackground,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             headerBuilder: (BuildContext context, bool isExpanded) {
               return Padding(
                 padding: const EdgeInsets.only(left: 16.0, top: 16),
@@ -66,7 +64,7 @@ class _GenreSectionState extends ConsumerState<GenreSection> {
                         // Center the text
                         child: Text(
                           totalSelected().toString(),
-                          style: verySmallText,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
                     )
@@ -100,8 +98,8 @@ class _GenreSectionState extends ConsumerState<GenreSection> {
     return widget.genreStates.mapIndexed((index, element) {
       final genre = widget.genreStates[index].genre;
       return FilterChip(
-        backgroundColor: searchBarBackground,
-        selectedColor: buttonGrey,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        selectedColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         label: Text(genre.name, style: Theme.of(context).textTheme.labelSmall),
         selected: widget.genreStates[index].isSelected,
         onSelected: (selected) {

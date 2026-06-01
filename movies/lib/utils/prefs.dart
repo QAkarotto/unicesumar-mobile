@@ -1,5 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+class PrefKeys {
+  static const themeIsLight = 'theme_is_light';
+  static const genreSearchQuery = 'genre_search_query';
+  static const genreSortIndex = 'genre_sort_index';
+}
+
 class Prefs {
   final SharedPreferences preferences;
 

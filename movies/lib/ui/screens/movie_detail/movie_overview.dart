@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/data/models/movie_details.dart';
 
-import 'package:movies/ui/theme/theme.dart';
-
 class MovieOverview extends StatelessWidget {
   final MovieDetails details;
 
@@ -14,7 +12,7 @@ class MovieOverview extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       child: Text(
         details.overview,
-        style: body1Regular,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }

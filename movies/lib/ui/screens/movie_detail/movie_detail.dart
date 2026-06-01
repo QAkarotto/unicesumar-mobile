@@ -11,7 +11,6 @@ import 'package:movies/data/models/movie_videos.dart';
 import 'package:movies/providers.dart';
 import 'package:movies/router/app_routes.dart';
 import 'package:movies/ui/movie_viewmodel.dart';
-import 'package:movies/ui/theme/theme.dart';
 import 'package:movies/ui/widgets/horiz_cast.dart';
 import 'package:movies/ui/widgets/not_ready.dart';
 import 'package:movies/ui/screens/movie_detail/button_row.dart';
@@ -54,7 +53,10 @@ class _MovieDetailState extends ConsumerState<MovieDetail> {
 
   Future getFavorites() async {
     favorites = await movieViewModel.getFavorites();
-    favoriteNotifier.value = isMovieFavorite(widget.movieId);
+    final existingFavorite = favorites
+        .firstWhereOrNull((favorite) => favorite.movieId == widget.movieId);
+    favoriteNotifier.value = existingFavorite != null;
+    currentFavoriteId = existingFavorite?.id ?? -1;
   }
 
   bool isMovieFavorite(int id) {
@@ -80,9 +82,9 @@ class _MovieDetailState extends ConsumerState<MovieDetail> {
           return SafeArea(
             child: Scaffold(
               appBar: AppBar(
-                backgroundColor: screenBackground,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 leading: BackButton(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onSurface,
                   onPressed: () {
                     context.router.maybePopTop();
                   },
@@ -92,7 +94,7 @@ class _MovieDetailState extends ConsumerState<MovieDetail> {
                     style: Theme.of(context).textTheme.headlineMedium),
               ),
               body: Container(
-                color: screenBackground,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -118,15 +120,33 @@ class _MovieDetailState extends ConsumerState<MovieDetail> {
                                   onFavoriteSelected: () async {
                                     if (favoriteNotifier.value) {
                                       if (currentFavoriteId != -1) {
-                                        movieViewModel
+                                        await movieViewModel
                                             .removeFavorite(currentFavoriteId);
+                                      } else {
+                                        final existingFavorite = favorites
+                                            .firstWhereOrNull((favorite) =>
+                                                favorite.movieId ==
+                                                movieDetails.id);
+                                        if (existingFavorite != null) {
+                                          await movieViewModel.removeFavorite(
+                                              existingFavorite.id);
+                                        }
                                       }
                                       favoriteNotifier.value = false;
+                                      currentFavoriteId = -1;
                                     } else {
-                                      currentFavoriteId = movieDetails.id;
                                       await movieViewModel
                                           .saveFavorite(movieDetails);
-                                      favoriteNotifier.value = true;
+                                      favorites =
+                                          await movieViewModel.getFavorites();
+                                      final existingFavorite = favorites
+                                          .firstWhereOrNull((favorite) =>
+                                              favorite.movieId ==
+                                              movieDetails.id);
+                                      currentFavoriteId =
+                                          existingFavorite?.id ?? -1;
+                                      favoriteNotifier.value =
+                                          existingFavorite != null;
                                     }
                                   },
                                 );
