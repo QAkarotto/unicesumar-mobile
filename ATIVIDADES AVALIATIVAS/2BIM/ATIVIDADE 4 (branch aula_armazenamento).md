@@ -1,12 +1,12 @@
 # Atividade avaliativa 4- Armazenamento local - Flutter / Movie App
 
-## Data de entrega (proxima aula):
+## Data de entrega (próxima aula):
 - ESOFT7S - 01/06 19h
 - ADSIS5S - 02/06 19h
 
 ## Usando a Branch da Aula
 
-Esta atividade usa a branch **`aula_armazenamento`**. Se voce estiver no fork, crie uma branch sua a partir dela para pegar as atualizacoes da aula.
+Esta atividade usa a branch **`aula_armazenamento`**. Se você estiver no fork, crie uma branch sua a partir dela para pegar as atualizações da aula.
 
 ```bash
 git fetch origin
@@ -20,10 +20,10 @@ flutter pub get
 ---
 # movies
 
-Projeto Flutter: versao evoluida do app de aula com armazenamento local em dois niveis.
+Projeto Flutter: versão evoluída do app de aula com armazenamento local em dois níveis.
 
 - SharedPreferences para dados simples.
-- SQLite com Drift para persistencia relacional.
+- SQLite com Drift para persistência relacional.
 
 **Material de apoio**: [MOVIES_GUIA.md](../MOVIES_GUIA.md)
 
@@ -31,17 +31,17 @@ Projeto Flutter: versao evoluida do app de aula com armazenamento local em dois 
 
 ## Tarefas
 
-1. **Tema claro com selecao de tema**
-   - O app ja inicia em tema escuro; a tarefa e implementar o tema claro e oferecer ao usuario a opcao de selecionar entre claro e escuro.
-   - Salvar a preferencia com SharedPreferences.
+1. **Tema claro com seleção de tema**
+   - O app já inicia em tema escuro; a tarefa é implementar o tema claro e oferecer ao usuário a opção de selecionar entre claro e escuro.
+   - Salvar a preferência com SharedPreferences.
    - Restaurar a escolha ao reabrir o aplicativo.
    - Dica: veja [movies/lib/main.dart](../../movies/lib/main.dart) e [movies/lib/ui/theme/theme.dart](../../movies/lib/ui/theme/theme.dart).
 
 2. **SharedPreferences**
-   - Guardar e restaurar o ultimo termo de busca na tela de generos.
-   - Guardar e restaurar o ultimo criterio de ordenacao escolhido.
-   - Ao abrir a tela de generos, restaurar os valores salvos.
-   - Ao mudar a busca ou ordenacao, salvar o novo valor.
+   - Guardar e restaurar o último termo de busca na tela de gêneros.
+   - Guardar e restaurar o último critério de ordenação escolhido.
+   - Ao abrir a tela de gêneros, restaurar os valores salvos.
+   - Ao mudar a busca ou ordenação, salvar o novo valor.
    - Dica: veja [movies/lib/ui/screens/genres/genre_screen.dart](../../movies/lib/ui/screens/genres/genre_screen.dart), [movies/lib/providers.dart](../../movies/lib/providers.dart) e [movies/lib/utils/prefs.dart](../../movies/lib/utils/prefs.dart).
 
 3. **SQLite/Drift**
@@ -49,17 +49,17 @@ Projeto Flutter: versao evoluida do app de aula com armazenamento local em dois 
    - Listar favoritos a partir do banco local.
    - Remover favoritos do banco local.
    - Ajustar o fluxo para que a tela de favoritos leia do banco.
-   - Garantir que ao desfavoritar o item seja removido do banco.
+   - Garantir que ao desfavoritar o item ele seja removido do banco.
    - Dica: veja [movies/lib/data/database/](../../movies/lib/data/database/), [movies/lib/ui/movie_viewmodel.dart](../../movies/lib/ui/movie_viewmodel.dart), [movies/lib/ui/screens/movie_detail/movie_detail.dart](../../movies/lib/ui/screens/movie_detail/movie_detail.dart) e [movies/lib/ui/screens/favorites/favorite_screen.dart](../../movies/lib/ui/screens/favorites/favorite_screen.dart).
 
-4. **Validacao**
-   - Reabrir o app e verificar que o tema, as preferencias e os favoritos foram restaurados.
-   - Alterar o tema, a busca e a ordenacao para confirmar que tudo fica salvo.
+4. **Validação**
+   - Reabrir o app e verificar que o tema, as preferências e os favoritos foram restaurados.
+   - Alterar o tema, a busca e a ordenação para confirmar que tudo fica salvo.
    - Favoritar, fechar o app e confirmar que os dados continuam persistidos.
 
 ---
 
-## Documentacao
+## Documentação
 
 - [Flutter Docs](https://flutter.dev/docs)
 - [SharedPreferences](https://pub.dev/packages/shared_preferences)
@@ -67,9 +67,9 @@ Projeto Flutter: versao evoluida do app de aula com armazenamento local em dois 
 
 ## Formato de Entrega
 
-- Publicar em **repositorio publico no GitHub**.
+- Publicar em **repositório público no GitHub**.
 - Enviar o link por e-mail para **joao.vsantos@unicesumar.edu.br**.
-- Titulo do e-mail: **Trabalho 4 Mobile 2BIM - Turma: ESOFT7S/ADSIS5S**.
-- Incluir no corpo do e-mail: nome dos integrantes, usuario GitHub e link do repositorio.
+- Título do e-mail: **Trabalho 4 Mobile 2BIM - Turma: ESOFT7S/ADSIS5S**.
+- Incluir no corpo do e-mail: nome dos integrantes, usuário GitHub e link do repositório.
 - Colocar em **CC** o e-mail de todos os integrantes.
-- Grupos de ate **6 participantes**.
+- Grupos de até **6 participantes**.
