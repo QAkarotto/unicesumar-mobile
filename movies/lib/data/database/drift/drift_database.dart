@@ -12,36 +12,50 @@ class DriftDatabase implements IDatabase {
 
   @override
   Future<List<DBFavorite>> getFavorites() async {
-    throw UnimplementedError('Exercicio: implementar favoritos com Drift');
+    final favorites =
+        await movieDatabase.select(movieDatabase.driftFavorite).get();
+    return favorites
+        .map((favorite) => DBFavorite(
+              id: favorite.id,
+              movieId: favorite.movieId,
+              backdropPath: favorite.backdropPath,
+              posterPath: favorite.posterPath,
+              favorite: favorite.favorite,
+              popularity: favorite.popularity,
+              releaseDate: favorite.releaseDate,
+              title: favorite.title,
+              overview: favorite.overview,
+            ))
+        .toList();
   }
 
   @override
   Future<List<DBMovieGenre>> getGenres() async {
-    final genres = await movieDatabase.managers.driftGenre.get();
-    final dbGenres = <DBMovieGenre>[];
-    for (final genre in genres) {
-      dbGenres.add(DBMovieGenre(
-        id: genre.id,
-        remoteId: genre.remoteId,
-        name: genre.name,
-      ));
-    }
-    return dbGenres;
+    final genres = await movieDatabase.select(movieDatabase.driftGenre).get();
+    return genres
+        .map((genre) => DBMovieGenre(
+              id: genre.id,
+              remoteId: genre.remoteId,
+              name: genre.name,
+            ))
+        .toList();
   }
 
   @override
   Future<DBConfiguration?> getMovieConfiguration() async {
-    final images = await movieDatabase.managers.driftConfigurationImages.get();
+    final images = await movieDatabase
+        .select(movieDatabase.driftConfigurationImages)
+        .get();
     final dbImages = <DBConfigurationImages>[];
-    for (final genre in images) {
+    for (final image in images) {
       dbImages.add(DBConfigurationImages(
-        baseUrl: genre.baseUrl,
-        secureBaseUrl: genre.secureBaseUrl,
-        backdropSizes: genre.backdropSizes.split(','),
-        logoSizes: genre.logoSizes.split(','),
-        posterSizes: genre.posterSizes.split(','),
-        profileSizes: genre.profileSizes.split(','),
-        stillSizes: genre.stillSizes.split(','),
+        baseUrl: image.baseUrl,
+        secureBaseUrl: image.secureBaseUrl,
+        backdropSizes: image.backdropSizes.split(','),
+        logoSizes: image.logoSizes.split(','),
+        posterSizes: image.posterSizes.split(','),
+        profileSizes: image.profileSizes.split(','),
+        stillSizes: image.stillSizes.split(','),
       ));
     }
     if (dbImages.isEmpty) {
@@ -57,38 +71,84 @@ class DriftDatabase implements IDatabase {
 
   @override
   Future<bool> removeFavorite(int id) async {
-    throw UnimplementedError('Exercicio: implementar favoritos com Drift');
+    final affectedRows =
+        await (movieDatabase.delete(movieDatabase.driftFavorite)
+              ..where((tbl) => tbl.id.equals(id)))
+            .go();
+    return affectedRows > 0;
   }
 
   @override
   Future saveFavorite(DBFavorite favorite) async {
-    throw UnimplementedError('Exercicio: implementar favoritos com Drift');
+    final existingFavorite =
+        await (movieDatabase.select(movieDatabase.driftFavorite)
+              ..where((tbl) => tbl.movieId.equals(favorite.movieId)))
+            .getSingleOrNull();
+
+    final companion = DriftFavoriteCompanion.insert(
+      movieId: favorite.movieId,
+      backdropPath: favorite.backdropPath,
+      posterPath: favorite.posterPath,
+      favorite: favorite.favorite,
+      popularity: favorite.popularity,
+      releaseDate: favorite.releaseDate,
+      title: favorite.title,
+      overview: favorite.overview,
+    );
+
+    if (existingFavorite != null) {
+      await (movieDatabase.update(movieDatabase.driftFavorite)
+            ..where((tbl) => tbl.id.equals(existingFavorite.id)))
+          .write(companion);
+      return;
+    }
+
+    await movieDatabase.into(movieDatabase.driftFavorite).insert(companion);
   }
 
   @override
   Future saveGenres(List<DBMovieGenre> genres) async {
     for (final genre in genres) {
-      movieDatabase.managers.driftGenre.create((x) => DriftGenreData(
-          id: genre.id, remoteId: genre.remoteId, name: genre.name));
+      await movieDatabase.into(movieDatabase.driftGenre).insert(
+            DriftGenreCompanion.insert(
+              remoteId: genre.remoteId,
+              name: genre.name,
+            ),
+          );
     }
   }
 
   @override
   Future saveMovieConfiguration(DBConfiguration configuration) async {
-    movieDatabase.managers.driftConfigurationImages
-        .create((x) => DriftConfigurationImagesCompanion.insert(
-              baseUrl: configuration.images.baseUrl,
-              secureBaseUrl: configuration.images.secureBaseUrl,
-              backdropSizes: configuration.images.backdropSizes.join(','),
-              logoSizes: configuration.images.logoSizes.join(','),
-              posterSizes: configuration.images.posterSizes.join(','),
-              profileSizes: configuration.images.profileSizes.join(','),
-              stillSizes: configuration.images.stillSizes.join(','),
-            ));
+    await movieDatabase.into(movieDatabase.driftConfigurationImages).insert(
+          DriftConfigurationImagesCompanion.insert(
+            baseUrl: configuration.images.baseUrl,
+            secureBaseUrl: configuration.images.secureBaseUrl,
+            backdropSizes: configuration.images.backdropSizes.join(','),
+            logoSizes: configuration.images.logoSizes.join(','),
+            posterSizes: configuration.images.posterSizes.join(','),
+            profileSizes: configuration.images.profileSizes.join(','),
+            stillSizes: configuration.images.stillSizes.join(','),
+          ),
+        );
   }
 
   @override
   Stream<List<DBFavorite>> streamFavorites() {
-    throw UnimplementedError('Exercicio: implementar favoritos com Drift');
+    return movieDatabase.select(movieDatabase.driftFavorite).watch().map(
+          (favorites) => favorites
+              .map((favorite) => DBFavorite(
+                    id: favorite.id,
+                    movieId: favorite.movieId,
+                    backdropPath: favorite.backdropPath,
+                    posterPath: favorite.posterPath,
+                    favorite: favorite.favorite,
+                    popularity: favorite.popularity,
+                    releaseDate: favorite.releaseDate,
+                    title: favorite.title,
+                    overview: favorite.overview,
+                  ))
+              .toList(),
+        );
   }
 }

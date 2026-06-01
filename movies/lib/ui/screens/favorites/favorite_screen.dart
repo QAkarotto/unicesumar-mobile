@@ -8,7 +8,6 @@ import 'package:movies/providers.dart';
 import 'package:movies/router/app_routes.dart';
 import 'package:movies/utils/utils.dart';
 import 'package:movies/ui/movie_viewmodel.dart';
-import 'package:movies/ui/theme/theme.dart';
 import 'package:movies/ui/widgets/not_ready.dart';
 import 'package:movies/ui/widgets/vert_favorite_list.dart';
 import 'package:movies/ui/screens/genres/sort_picker.dart';
@@ -23,8 +22,6 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   late MovieViewModel movieViewModel;
-  List<DBFavorite> currentFavorites = [];
-  final valueNotifier = ValueNotifier<List<DBFavorite>>([]);
   Sorting selectedSort = Sorting.aToz;
 
   @override
@@ -51,7 +48,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
           }
           return Scaffold(
             body: Container(
-              color: screenBackground,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -75,12 +72,14 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
                         ),
                         SortPicker(
                             useSliver: true,
+                            initialSort: selectedSort,
                             onSortSelected: (sorting) {
-                              selectedSort = sorting;
-                              sortMovies();
+                              setState(() {
+                                selectedSort = sorting;
+                              });
                             }),
                         VerticalFavoriteList(
-                          favorites: snapshot.requireData,
+                          favorites: sortFavorites(snapshot.requireData),
                           movieViewModel: movieViewModel,
                           onMovieTap: (movieId) {
                             context.router
@@ -106,11 +105,11 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
     return movieViewModel.streamFavorites();
   }
 
-  void sortMovies() {
-    if (currentFavorites.isEmpty) {
-      return;
+  List<DBFavorite> sortFavorites(List<DBFavorite> favorites) {
+    if (favorites.isEmpty) {
+      return favorites;
     }
-    currentFavorites = currentFavorites.sorted((a, b) {
+    return favorites.sorted((a, b) {
       switch (selectedSort) {
         case Sorting.aToz:
           return a.title.compareTo(b.title);
@@ -122,7 +121,6 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
           return a.releaseDate.compareTo(b.releaseDate);
       }
     });
-    valueNotifier.value = currentFavorites;
   }
 
   Future removeFavorite(DBFavorite favorite) async {

@@ -10,8 +10,8 @@ import 'package:movies/ui/movie_viewmodel.dart';
 import 'package:movies/ui/screens/genres/genre_search_row.dart';
 import 'package:movies/ui/screens/genres/genre_section.dart';
 import 'package:movies/ui/screens/genres/sort_picker.dart';
-import 'package:movies/ui/theme/theme.dart';
 import 'package:movies/ui/widgets/not_ready.dart';
+import 'package:movies/utils/prefs.dart';
 import 'package:movies/ui/widgets/sliver_divider.dart';
 import 'package:movies/ui/widgets/vert_movie_list.dart';
 import 'package:movies/utils/utils.dart';
@@ -33,6 +33,7 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
   final expandedNotifier = ValueNotifier<bool>(false);
   MovieResponse? currentMovieResponse;
   Sorting selectedSort = Sorting.aToz;
+  bool _genrePreferencesLoaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,7 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
       data: (viewModel) {
         movieViewModel = viewModel;
         buildGenreState();
+        restoreGenrePreferences();
         return buildScreen();
       },
     );
@@ -58,7 +60,7 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
   Widget buildScreen() {
     return SafeArea(
       child: Container(
-        color: screenBackground,
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -78,11 +80,12 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
                         ),
                         GenreSearchRow((searchString) {
                           currentSearchString = searchString;
+                          saveGenreSearch(searchString);
                           currentMovieResponse = null;
                           FocusScope.of(context).unfocus();
                           expandedNotifier.value = false;
                           search();
-                        }),
+                        }, initialValue: currentSearchString),
                       ],
                     ),
                   ),
@@ -104,8 +107,10 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
                   const SliverDivider(),
                   SortPicker(
                       useSliver: true,
+                      initialSort: selectedSort,
                       onSortSelected: (sorting) {
                         selectedSort = sorting;
+                        saveGenreSort(sorting.index);
                         sortMovies();
                       }),
                   ValueListenableBuilder<List<MovieResults>>(
@@ -201,5 +206,33 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
       return 0;
     });
     moviesNotifier.value = currentMovieList;
+  }
+
+  Future<void> restoreGenrePreferences() async {
+    if (_genrePreferencesLoaded) {
+      return;
+    }
+    _genrePreferencesLoaded = true;
+    final prefs = await ref.read(prefsProvider.future);
+    currentSearchString = prefs.getString(PrefKeys.genreSearchQuery) ?? '';
+    final savedSortIndex = prefs.getInt(PrefKeys.genreSortIndex) ?? 0;
+    if (savedSortIndex >= 0 && savedSortIndex < Sorting.values.length) {
+      selectedSort = Sorting.values[savedSortIndex];
+    }
+    if (currentSearchString.isNotEmpty) {
+      currentMovieResponse = null;
+      await search();
+      setState(() {});
+    }
+  }
+
+  Future<void> saveGenreSearch(String search) async {
+    final prefs = await ref.read(prefsProvider.future);
+    prefs.setString(PrefKeys.genreSearchQuery, search);
+  }
+
+  Future<void> saveGenreSort(int index) async {
+    final prefs = await ref.read(prefsProvider.future);
+    prefs.setInt(PrefKeys.genreSortIndex, index);
   }
 }

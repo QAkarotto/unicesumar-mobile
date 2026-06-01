@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import 'package:movies/router/app_routes.dart';
-import 'package:movies/ui/theme/theme.dart';
 
 @RoutePage()
 class MainScreen extends StatefulWidget {
@@ -14,11 +13,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-      backgroundColor: screenBackground,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       routes: const [
         HomeRoute(),
         GenreRoute(),

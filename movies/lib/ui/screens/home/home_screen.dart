@@ -7,7 +7,6 @@ import 'package:movies/ui/screens/home/title_row.dart';
 
 import 'package:movies/router/app_routes.dart';
 import 'package:movies/ui/movie_viewmodel.dart';
-import 'package:movies/ui/theme/theme.dart';
 import 'package:movies/ui/widgets/movie_widget.dart';
 import 'package:movies/ui/widgets/not_ready.dart';
 import 'package:movies/ui/screens/home/home_screen_image.dart';
@@ -39,6 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget buildScreen() {
+    final themeMode = ref.watch(themeModeProvider);
     return SafeArea(
       child: FutureBuilder(
         future: loadData(),
@@ -49,14 +49,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }
           return SingleChildScrollView(
             child: Container(
-              color: screenBackground,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 24),
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: Text('Now Playing', style: largeTitle)),
+                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Now Playing',
+                            style: Theme.of(context).textTheme.titleLarge),
+                        IconButton(
+                          icon: Icon(
+                            themeMode == ThemeMode.dark
+                                ? Icons.light_mode
+                                : Icons.dark_mode,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          onPressed: () {
+                            ref.read(themeModeProvider.notifier).toggleTheme();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                   HomeScreenImage(
                       movieViewModel: movieViewModel,

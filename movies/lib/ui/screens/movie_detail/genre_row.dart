@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/data/models/genre.dart';
 
-import 'package:movies/ui/theme/theme.dart';
-
 class GenreRow extends StatefulWidget {
   final List<Genre> genres;
 
@@ -56,15 +54,14 @@ class _GenreRowState extends State<GenreRow>
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: buttonGrey,
+                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         genre.name,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: Colors.white),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
                       ),
                     ))
                 .toList(),

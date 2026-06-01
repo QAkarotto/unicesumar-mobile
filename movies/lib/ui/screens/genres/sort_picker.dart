@@ -9,22 +9,39 @@ typedef OnSortSelected = void Function(Sorting);
 class SortPicker extends ConsumerStatefulWidget {
   final bool useSliver;
   final OnSortSelected onSortSelected;
+  final Sorting initialSort;
 
-  const SortPicker({required this.useSliver, required this.onSortSelected, super.key});
+  const SortPicker(
+      {required this.useSliver,
+      required this.onSortSelected,
+      this.initialSort = Sorting.aToz,
+      super.key});
 
   @override
   ConsumerState<SortPicker> createState() => _SortPickerState();
 }
 
 class _SortPickerState extends ConsumerState<SortPicker> {
-  Sorting selectedSort = Sorting.aToz;
+  late Sorting selectedSort;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedSort = widget.initialSort;
+  }
+
+  @override
+  void didUpdateWidget(covariant SortPicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialSort != oldWidget.initialSort) {
+      selectedSort = widget.initialSort;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     if (widget.useSliver) {
-      return SliverToBoxAdapter(
-          child: buildRow()
-      );
+      return SliverToBoxAdapter(child: buildRow());
     } else {
       return buildRow();
     }
@@ -42,7 +59,7 @@ class _SortPickerState extends ConsumerState<SortPicker> {
         PopupMenuButton<Sorting>(
           icon: const Icon(
             Icons.arrow_drop_down,
-            color: Colors.white ,
+            color: Colors.white,
           ),
           onSelected: (Sorting value) {
             widget.onSortSelected(value);

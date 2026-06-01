@@ -56,19 +56,30 @@ class MovieViewModel {
   }
 
   Future saveFavorite(MovieDetails movieDetails) async {
-    return;
+    final favorite = DBFavorite(
+      id: 0,
+      movieId: movieDetails.id,
+      backdropPath: movieDetails.backdropPath ?? '',
+      posterPath: movieDetails.posterPath ?? '',
+      favorite: true,
+      popularity: movieDetails.popularity,
+      releaseDate: movieDetails.releaseDate ?? DateTime.now(),
+      title: movieDetails.title,
+      overview: movieDetails.overview ?? '',
+    );
+    return database.saveFavorite(favorite);
   }
 
   Future<bool> removeFavorite(int id) async {
-    return false;
+    return database.removeFavorite(id);
   }
 
   Future<List<DBFavorite>> getFavorites() async {
-    return const <DBFavorite>[];
+    return database.getFavorites();
   }
 
   Stream<List<DBFavorite>> streamFavorites() {
-    return Stream.value(const <DBFavorite>[]);
+    return database.streamFavorites();
   }
 
   Future<MovieResponse?> getTrendingMovies(int page) async {
