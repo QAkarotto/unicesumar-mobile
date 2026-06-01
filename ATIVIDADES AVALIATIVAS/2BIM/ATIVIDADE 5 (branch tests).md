@@ -1,8 +1,8 @@
 # Atividade avaliativa 5 (1,0) - Desafios - Flutter / Movie App
 
 ## Data de entrega:
-- ESOFT7S - 22/06
-- ADSIS5S - 23/06
+- ESOFT7S - 15/06
+- ADSIS5S - 16/06
 
 ## 🔀 Usando a Branch da Aula
 
