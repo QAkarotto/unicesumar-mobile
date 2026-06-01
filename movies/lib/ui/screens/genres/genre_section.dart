@@ -38,7 +38,7 @@ class _GenreSectionState extends ConsumerState<GenreSection> {
         expandIconColor: Colors.white,
         expansionCallback: (int index, bool expanded) {
           setState(() {
-            widget.onGenresExpanded(expanded);
+            widget.onGenresExpanded(!expanded);
           });
         },
         children: [
