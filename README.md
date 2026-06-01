@@ -39,6 +39,22 @@ flutter run
 flutter test
 ```
 
+### Testes do projeto Movies
+
+Na pasta `movies/`, há exemplos de testes de unidade, widget e integração.
+
+```bash
+cd movies
+flutter test
+flutter test test/utils_test.dart
+flutter test integration_test/app_test.dart
+```
+
+Observações:
+
+- Os testes de integração precisam de emulador ou dispositivo conectado.
+- Os exemplos foram pensados para validar regras, widgets e fluxos principais sem depender de persistência real.
+
 ### Dart
 
 ```bash
