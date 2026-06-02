@@ -55,7 +55,7 @@ TMDB_KEY=sua_chave_aqui
 flutter run -d chrome
 ```
 
-Teste a app: navegue pelas telas, clique em filmes, verifique se os dados carregam.
+Teste o app: navegue pelas telas, clique em filmes, verifique se os dados carregam.
 
 ### 2️⃣ Emulador Android
 

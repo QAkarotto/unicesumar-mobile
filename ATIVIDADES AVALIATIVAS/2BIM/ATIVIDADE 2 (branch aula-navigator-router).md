@@ -52,7 +52,7 @@ Refatore o `onTap` para usar AutoRoute em vez de `Navigator.push()`.
 
 ---
 
-## � Formato de Entrega
+## Formato de Entrega
 
 - Publicar em **repositório público no GitHub**.
 - Enviar o link por e-mail para **joao.vsantos@unicesumar.edu.br**.
@@ -64,7 +64,7 @@ Refatore o `onTap` para usar AutoRoute em vez de `Navigator.push()`.
 
 ---
 
-## �📚 Referências para Pesquisa
+## 📚 Referências para Pesquisa
 
 - [AutoRoute Package](https://pub.dev/packages/auto_route)
 - [AutoRoute Documentation](https://autoroute.vercel.app/)
