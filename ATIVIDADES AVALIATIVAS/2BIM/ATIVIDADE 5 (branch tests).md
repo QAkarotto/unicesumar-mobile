@@ -1,4 +1,4 @@
-# Atividade avaliativa 5 (1,0) - Desafios - Flutter / Movie App
+# Atividade avaliativa 5 (3,0) - Desafios - Flutter / Movie App
 
 ## Data de entrega:
 - ESOFT7S - 22/06
